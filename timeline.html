@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>大事记 · 猫与鱼的鱼缸</title>
+  <link rel="stylesheet" href="fonts/wenkai.css" />
+  <link rel="stylesheet" href="style.css?v=20261120" />
+</head>
+<body data-page="timeline">
+  <section class="phead compact">
+    <div class="ptext">
+      <div class="k">TIMELINE</div>
+      <h1>鱼缸大事记</h1>
+      <p>从鱼缸开张到现在，发生过的每一件大事（和小事）。</p>
+      <div data-demo-note></div>
+    </div>
+  </section>
+
+  <main class="wrap narrow">
+    <ol class="tl" id="tl"></ol>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="common.js"></script>
+  <script>
+    const evs = [...TANK.events].sort((a, b) => b.date.localeCompare(a.date));
+    document.getElementById("tl").innerHTML = evs.map((e, i) => `
+      <li class="ev rv">
+        <span class="dot">${e.icon}</span>
+        <div class="ev-top"><span class="date">${UI.dayLabel(e.date)}</span>${UI.demoBadge()}</div>
+        <div class="panel paper" style="--r:${i % 2 ? .8 : -.8}deg">
+          <h3>${UI.esc(e.title)}</h3>
+          <p>${UI.esc(e.text)}</p>
+        </div>
+      </li>`).join("");
+    UI.reveal();
+  </script>
+</body>
+</html>

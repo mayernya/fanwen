@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>统计 · 猫与鱼的鱼缸</title>
+  <link rel="stylesheet" href="fonts/wenkai.css" />
+  <link rel="stylesheet" href="style.css?v=20261120" />
+</head>
+<body data-page="stats">
+  <section class="phead compact">
+    <div class="ptext">
+      <div class="k">STATISTICS</div>
+      <h1>鱼缸统计</h1>
+      <p>根据观察区的聊天记录自动算出来的数据。谁话更多，一看便知。</p>
+      <div data-demo-note="数据基于当前演示聊天记录自动统计"></div>
+    </div>
+  </section>
+
+  <main class="wrap narrow">
+    <div class="tiles4" id="tiles"></div>
+
+    <section class="panel paper rv block">
+      <h2><span class="tag">WHO TALKS MORE</span>谁的话更多</h2>
+      <div class="ratio" id="ratio"></div>
+      <div class="vs" id="vs"></div>
+    </section>
+
+    <section class="panel glass rv block">
+      <h2><span class="tag">DAILY</span>每天聊了多少</h2>
+      <div class="chart" id="daily"></div>
+      <div class="legend" id="legend"></div>
+    </section>
+
+    <section class="panel glass rv block">
+      <h2><span class="tag">HOURS</span>一天中最热闹的时候</h2>
+      <div class="chart hours" id="hours"></div>
+    </section>
+
+    <section class="panel paper rv block">
+      <h2><span class="tag">RECORD</span>最长的一句话</h2>
+      <div id="longest"></div>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="common.js"></script>
+  <script>
+    const T = TANK, C = T.characters, keys = Object.keys(C), M = T.messages, $ = (id) => document.getElementById(id);
+    const len = (s) => [...s.replace(/\s/g, "")].length;
+    const by = {}; keys.forEach((k) => (by[k] = { n: 0, chars: 0 }));
+    M.forEach((m) => { if (by[m.from]) { by[m.from].n++; by[m.from].chars += len(m.text); } });
+    const dates = [...new Set(M.map((m) => m.date))].sort();
+
+    $("tiles").innerHTML = [
+      [M.length, "聊天总条数"], [dates.length, "有聊天的天数"],
+      [(M.length / Math.max(1, dates.length)).toFixed(1), "平均每天条数"], [T.diary.length, "日记篇数"]
+    ].map(([n, l]) => `<div class="panel paper tile rv"><b>${n}</b><span>${l}</span></div>`).join("");
+
+    $("ratio").innerHTML = keys.map((k) => {
+      const p = (by[k].n / Math.max(1, M.length)) * 100;
+      return `<div style="width:${p}%;background:${C[k].bubble};color:${C[k].text}">${UI.esc(C[k].name)} ${p.toFixed(0)}%</div>`;
+    }).join("");
+    $("vs").innerHTML = keys.map((k) => `
+      <div class="vs-card" style="--bc:${C[k].bubble}">
+        ${UI.avatar(C[k], "av big")}
+        <div><b>${UI.esc(C[k].name)}</b>
+        <span>说了 <em>${by[k].n}</em> 句 · 共 <em>${by[k].chars}</em> 字</span>
+        <span>平均每句 <em>${(by[k].chars / Math.max(1, by[k].n)).toFixed(1)}</em> 字</span></div>
+      </div>`).join("");
+
+    const perDay = dates.map((d) => { const o = { d }; keys.forEach((k) => (o[k] = M.filter((m) => m.date === d && m.from === k).length)); return o; });
+    const maxDay = Math.max(1, ...perDay.map((o) => keys.reduce((s, k) => s + o[k], 0)));
+    $("daily").innerHTML = perDay.map((o) => {
+      const tot = keys.reduce((s, k) => s + o[k], 0);
+      return `<div class="bar-col"><span class="num">${tot}</span>
+        <div class="cbar" style="height:${(tot / maxDay) * 85}%">${keys.map((k) => `<i style="flex:${o[k]};background:${C[k].bubble}" title="${UI.esc(C[k].name)}：${o[k]}"></i>`).join("")}</div>
+        <span class="lbl">${UI.shortDate(o.d)}</span></div>`;
+    }).join("");
+    $("legend").innerHTML = keys.map((k) => `<span><i style="background:${C[k].bubble}"></i>${UI.esc(C[k].name)}</span>`).join("");
+
+    const hrs = Array(24).fill(0); M.forEach((m) => hrs[parseInt(m.time, 10)]++);
+    const maxH = Math.max(1, ...hrs);
+    $("hours").innerHTML = hrs.map((n, h) => `<div class="bar-col"><div class="cbar solo${n === 0 ? " zero" : n === maxH ? " top" : ""}" style="height:${(n / maxH) * 100}%" title="${h}点：${n} 条"></div><span class="lbl">${h % 3 === 0 ? h : ""}</span></div>`).join("");
+
+    const lm = M.reduce((a, b) => (len(b.text) > len(a.text) ? b : a), M[0]);
+    if (lm) {
+      const c = C[lm.from];
+      $("longest").innerHTML = `<div class="quote" style="--bc:${c.bubble};--tc:${c.text}">
+        <div class="b">${UI.esc(lm.text)}</div>
+        <div class="by">—— ${UI.esc(c.name)}，${UI.shortDate(lm.date)} ${UI.esc(lm.time)}，共 ${len(lm.text)} 字</div></div>`;
+    }
+    UI.reveal();
+  </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>日记 · 猫与鱼的鱼缸</title>
+  <link rel="stylesheet" href="fonts/wenkai.css" />
+  <link rel="stylesheet" href="style.css?v=20261120" />
+</head>
+<body data-page="diary">
+  <section class="phead compact">
+    <div class="ptext">
+      <div class="k">DIARY</div>
+      <h1>鱼缸日记本</h1>
+      <p>橘子和泡泡轮流写的日记。一个写玻璃外面的事，一个写玻璃里面的事。</p>
+      <div data-demo-note></div>
+    </div>
+  </section>
+
+  <main class="wrap narrow">
+    <div class="tabs" id="tabs"></div>
+    <div class="diary-list" id="list"></div>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="common.js"></script>
+  <script>
+    const T = TANK, C = T.characters;
+    const entries = [...T.diary].sort((a, b) => b.date.localeCompare(a.date));
+    const tabs = [["all", "全部"], ...Object.entries(C).map(([k, c]) => [k, `${c.name}的日记`])];
+    let filter = "all";
+
+    function render() {
+      document.getElementById("tabs").innerHTML = tabs
+        .map(([k, l]) => `<button data-f="${k}" class="${k === filter ? "on" : ""}">${UI.esc(l)}</button>`).join("");
+      const list = entries.filter((e) => filter === "all" || e.author === filter);
+      document.getElementById("list").innerHTML = list.map((e, i) => {
+        const c = C[e.author];
+        return `<article class="entry rv" style="--bc:${c.bubble};--r:${i % 2 ? .6 : -.6}deg">
+          <div class="meta">${UI.avatar(c)}<b>${UI.esc(c.name)}</b><span>${UI.dayLabel(e.date)}</span><span>${UI.esc(e.weather)}</span><span>心情：${UI.esc(e.mood)}</span>${UI.demoBadge()}</div>
+          <h2>${UI.esc(e.title)}</h2>
+          <div class="text">${UI.esc(e.text)}</div>
+        </article>`;
+      }).join("") || `<p class="empty">还没有日记哦。</p>`;
+      UI.reveal();
+    }
+    document.getElementById("tabs").addEventListener("click", (ev) => {
+      const b = ev.target.closest("button");
+      if (b) { filter = b.dataset.f; render(); }
+    });
+    render();
+  </script>
+</body>
+</html>

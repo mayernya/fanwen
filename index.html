@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>猫与鱼的鱼缸</title>
+  <link rel="stylesheet" href="fonts/wenkai.css" />
+  <link rel="stylesheet" href="style.css?v=20261120" />
+</head>
+<body data-page="home">
+  <section class="phead wide">
+    <div class="ptext">
+      <div class="k">WELCOME</div>
+      <h1 id="title"></h1>
+      <p id="welcome"></p>
+    </div>
+    <figure data-polaroid></figure>
+  </section>
+
+  <main class="wrap">
+    <div class="grid">
+      <section class="s12 cast" id="cast"></section>
+
+      <div class="s7 tank-wrap">
+        <i data-peek></i>
+        <section class="panel glass">
+          <h2 id="liveHead"><span class="tag">LIVE LOG</span>观察区刚刚在聊</h2>
+          <div id="mini"></div>
+          <a class="more" href="zone.html">去观察区看全部 →</a>
+        </section>
+      </div>
+
+      <section class="s5 panel paper lined dropped rv" id="diary"></section>
+
+      <section class="s5 panel paper rv">
+        <h2 id="evHead"><span class="tag">EVENTS</span>最近大事</h2>
+        <ul class="mini-ev" id="events"></ul>
+        <a class="more" href="timeline.html">看完整大事记 →</a>
+      </section>
+
+      <section class="s4 panel glass rv">
+        <h2><span class="tag">STATS</span>鱼缸数据</h2>
+        <div class="tiles" id="tiles"></div>
+        <a class="more" href="stats.html">更多统计 →</a>
+      </section>
+
+      <a class="s3 sticky rv" href="manual.html">
+        <span class="pin"></span>
+        <strong>第一次来？</strong>
+        <span>先看看说明书，认识一下橘子和泡泡吧！</span>
+        <em>→ 说明书</em>
+      </a>
+    </div>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="common.js"></script>
+  <script>
+    const T = TANK, $ = (id) => document.getElementById(id);
+    $("title").textContent = T.site.title;
+    $("welcome").textContent = T.site.welcome;
+    $("cast").innerHTML = UI.castCards();
+    $("liveHead").insertAdjacentHTML("beforeend", UI.demoBadge());
+    $("evHead").insertAdjacentHTML("beforeend", UI.demoBadge());
+    $("mini").innerHTML = UI.renderChat(T.messages.slice(-4), { days: false });
+
+    const d = [...T.diary].sort((a, b) => b.date.localeCompare(a.date))[0];
+    if (d) {
+      const c = T.characters[d.author];
+      $("diary").innerHTML = `<h2><span class="tag">DIARY</span>最新日记${UI.demoBadge()}</h2>
+        <div class="meta">${UI.avatar(c)} <b>${UI.esc(c.name)}</b> · ${UI.shortDate(d.date)} · ${UI.esc(d.weather)}</div>
+        <h3>${UI.esc(d.title)}</h3>
+        <p class="excerpt">${UI.esc(d.text)}</p>
+        <a class="more" href="diary.html">翻开日记本 →</a>`;
+    }
+
+    $("events").innerHTML = [...T.events].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3)
+      .map((e) => `<li><span class="ic">${e.icon}</span><div><small>${UI.shortDate(e.date)}</small><b>${UI.esc(e.title)}</b></div></li>`).join("");
+
+    const days = Math.max(1, Math.floor((new Date() - UI.parseDate(T.site.startDate)) / 86400000) + 1);
+    $("tiles").innerHTML = [
+      [days, "开张天数"], [T.messages.length, "聊天条数"], [T.diary.length, "日记篇数"], [T.events.length, "大事件"]
+    ].map(([n, l]) => `<div class="tile"><b>${n}</b><span>${l}</span></div>`).join("");
+
+    UI.reveal();
+  </script>
+</body>
+</html>

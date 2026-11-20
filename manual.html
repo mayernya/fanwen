@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>说明书 · 猫与鱼的鱼缸</title>
+  <link rel="stylesheet" href="fonts/wenkai.css" />
+  <link rel="stylesheet" href="style.css?v=20261120" />
+</head>
+<body data-page="manual">
+  <section class="phead">
+    <div class="ptext">
+      <div class="k">MANUAL</div>
+      <h1>鱼缸说明书</h1>
+      <p id="intro"></p>
+    </div>
+    <figure data-polaroid></figure>
+  </section>
+
+  <main class="wrap narrow">
+    <h2 class="sec-title">住户档案</h2>
+    <div class="profiles" id="profiles"></div>
+
+    <h2 class="sec-title">常见问题</h2>
+    <div class="faq" id="faq"></div>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="common.js"></script>
+  <script>
+    const T = TANK, $ = (id) => document.getElementById(id);
+    $("intro").textContent = T.manual.intro;
+    $("profiles").innerHTML = Object.values(T.characters).map((c, i) => `
+      <article class="panel paper idcard rv" style="--bc:${c.bubble};--r:${i % 2 ? 1 : -1}deg">
+        <div class="id-head">${UI.avatar(c, "av huge")}<div><h3>${UI.esc(c.name)}</h3><small>${UI.esc(c.handle)}</small></div></div>
+        <dl>
+          <dt>种类</dt><dd>${UI.esc(c.species)}</dd>
+          <dt>生日</dt><dd>${UI.esc(c.birthday)}</dd>
+          <dt>住在</dt><dd>${UI.esc(c.home)}</dd>
+          <dt>喜欢</dt><dd>${UI.esc(c.likes)}</dd>
+          <dt>讨厌</dt><dd>${UI.esc(c.dislikes)}</dd>
+        </dl>
+        <p class="phrase">“${UI.esc(c.catchphrase)}”</p>
+      </article>`).join("");
+    $("faq").innerHTML = T.manual.faq.map((f, i) => `
+      <details class="rv"${i === 0 ? " open" : ""}><summary>${UI.esc(f.q)}</summary><p>${UI.esc(f.a)}</p></details>`).join("");
+    UI.reveal();
+  </script>
+</body>
+</html>

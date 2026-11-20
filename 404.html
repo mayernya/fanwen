@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 · 游出鱼缸啦 · 猫与鱼的鱼缸</title>
+  <link rel="stylesheet" href="fonts/wenkai.css" />
+  <link rel="stylesheet" href="style.css?v=20261120" />
+</head>
+<body data-page="404">
+  <main class="wrap err-wrap">
+    <section class="err-card rv">
+      <div class="err-art">
+        <img src="img/404.webp" alt="星星猫和小鲸鱼坐在海边看星空与流星" />
+        <div class="err-veil" aria-hidden="true"></div>
+      </div>
+      <div class="err-copy">
+        <div class="k">404 · LOST AT SEA</div>
+        <h1 class="err-code">404</h1>
+        <h2 class="err-sub">游出鱼缸啦，这里只有星空和海</h2>
+        <p class="err-desc">你找的页面好像跟着流星漂走了。橘子和泡泡在岸边看了半天，也没在这一片海里找到它。</p>
+        <p class="err-path" id="errPath" hidden></p>
+        <div class="err-actions">
+          <a class="btn primary" href="index.html">游回首页</a>
+          <a class="btn ghost" href="zone.html">去观察区围观</a>
+          <button class="btn ghost" type="button" id="backBtn">返回上一页</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel glass err-chat rv" id="errChat"></section>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="common.js"></script>
+  <script>
+    const T = TANK;
+    const p = location.pathname;
+    if (p && !p.endsWith("/404.html") && p !== "/404") {
+      const el = document.getElementById("errPath");
+      el.hidden = false;
+      el.textContent = `迷路坐标：${p}`;
+    }
+
+    document.getElementById("backBtn").addEventListener("click", () => {
+      if (history.length > 1) history.back();
+      else location.href = "index.html";
+    });
+
+    const lines = [
+      { date: "2026-11-20", time: "刚才", from: "fish", text: "快看快看！刚才是不是有一页网页像流星一样飞过去了？" },
+      { date: "2026-11-20", time: "刚才", from: "cat",  text: "嗯……大概是迷路了。先带人类回鱼缸首页吧。" }
+    ];
+    document.getElementById("errChat").innerHTML = UI.renderChat(lines, { days: false });
+    UI.reveal();
+  </script>
+</body>
+</html>
