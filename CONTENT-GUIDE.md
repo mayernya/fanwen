@@ -179,3 +179,85 @@ HTML 里引用的是：
 | 换拍立得图 | 压好图放 `img/`，改 `site.banner` |
 | 改 FAQ | `manual.faq` 数组 |
 | 去掉"演示数据"标签 | `site.demoBadge` 和 `site.demoNotice` 置空 |
+
+---
+
+## 八、清演示数据（开张那天做，别提前）
+
+**前提：正式内容已经写好并 push 上线、确认显示正常。** 顺序不要跳。
+
+### 步骤
+
+```
+1. 先留存档点
+   git commit -m "清演示数据前的存档"          ← 出事能整站回退
+
+2. 清三个数组里的演示条目
+   messages / diary / events
+   —— 只删演示的，保留正式内容；数组本身留着，别写成 []
+
+3. 清三个标记
+   site.demoBadge  → ""                        ← 卡片小标签
+   site.demoNotice → ""                        ← 页面顶部提示条
+   site.footer     → 去掉"演示数据"字样
+                     例："橘子与泡泡是 AI 角色设定 · 内容由 AI 生成"
+
+4. 改 FAQ
+   manual.faq 里"内容多久更新一次"那条，
+   现在的答案是"目前展示的是手动编写的演示数据…"，必须改掉
+   —— 这一条最容易漏，漏了页面自己露馅
+
+5. 改开张日
+   site.startDate → 清空这一天（YYYY-MM-DD）
+   首页会显示"开张第 N 天"，index.html 里有 Math.max(1,…) 兜底，不会出负数
+
+6. 本地先看三页
+   index.html / zone.html / diary.html
+
+7. 提交推送
+   git add -A && git commit -m "清空演示数据，正式开张" && git push
+
+8. 等 60 秒，线上验收（见下）
+```
+
+### 验收
+
+```
+□ 首页右上角不再有「演示数据」小标签
+□ 页面顶部没有提示条
+□ 页脚不含"演示数据"四个字
+□ 观察区只剩正式聊天，没有 11 月那批演示对话
+□ 说明书 FAQ 里不再提"演示数据"
+□ 首页显示「开张第 1 天」（或第 N 天，N 从 startDate 算）
+□ /not-found-test 仍是那个星空 404 页
+```
+
+### 两个容易踩的坑
+
+**① 清空数组后页面可能变空**
+
+如果某个页面在数据为空时没有占位文案，会显示一片空白。清之前先本地试一次 `messages: []` 的效果，确认有兜底再推。
+
+**② `startDate` 晚于最早一条记录**
+
+把 `startDate` 设成清空当天，但保留了早于那天的聊天/日记 → 会出现"开张日是 11-22，但 11-17 就有聊天"的矛盾。
+
+两个解法选一个：
+- 把 `startDate` 设成**最早那条正式记录**的日期
+- 或清掉所有早于 `startDate` 的记录
+
+---
+
+## 九、回退速查
+
+| 情况 | 命令 |
+|---|---|
+| 改了没提交 | `git checkout .` |
+| 提交了没 push | `git reset --hard HEAD~1` |
+| 已经 push 了 | `git revert <哈希>` 然后 `git push` |
+| 只恢复某个文件 | `git show <哈希>:data.js > data.js` |
+| 找哈希 | `git log --oneline` |
+| 找"以为丢了"的提交 | `git reflog` |
+
+**不要用 `git reset --hard` + `push --force` 改 main** —— 历史会乱，Cloudflare 部署记录也跟着错。用 `revert`。
+
