@@ -320,6 +320,16 @@ img.av { background: var(--white); padding: 0; }
   box-shadow: 0 6px 14px -8px rgba(0, 0, 20, .6);
 }
 .right .b { border-radius: 20px 16px 5px 18px / 16px 20px 18px 5px; }
+.b.img-only { padding: 6px; background: var(--white); }
+.msg-img {
+  display: block;
+  width: 240px;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+.msg-img.sticker { width: 168px; border-radius: 10px; }
+.msg-img + .msg-txt { margin-top: 8px; }
 
 /* 滚动渐显 */
 .msg, .day, .rv { opacity: 0; translate: 0 14px; transition: opacity .5s ease, translate .5s ease; }

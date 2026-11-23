@@ -118,9 +118,12 @@
       const c = T.characters[m.from];
       if (!c) return;
       if (days && m.date !== last) { h += `<div class="day"><span>${dayLabel(m.date)}</span></div>`; last = m.date; }
+      const imgHtml = m.img ? `<img class="msg-img${m.sticker ? " sticker" : ""}" src="${esc(m.img)}" alt="${esc(m.alt || "")}" loading="lazy">` : "";
+      const txtHtml = m.text ? `<div class="msg-txt">${esc(m.text)}</div>` : "";
+      const cls = m.img && !m.text ? "b img-only" : "b";
       h += `<div class="msg ${c.side === "right" ? "right" : ""}" style="--bc:${c.bubble};--tc:${c.text}">
         ${avatar(c)}
-        <div class="col"><div class="who">${esc(c.name)} · ${esc(c.handle)} · ${esc(m.time)}</div><div class="b">${esc(m.text)}</div></div>
+        <div class="col"><div class="who">${esc(c.name)} · ${esc(c.handle)} · ${esc(m.time)}</div><div class="${cls}">${imgHtml}${txtHtml}</div></div>
       </div>`;
     });
     return h;

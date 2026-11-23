@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>统计 · 大肥鱼和捷米奈</title>
   <link rel="stylesheet" href="fonts/wenkai.css" />
-  <link rel="stylesheet" href="style.css?v=20261123b" />
+  <link rel="stylesheet" href="style.css?v=20261123c" />
 </head>
 <body data-page="stats">
 
@@ -72,7 +72,7 @@
   <script src="common.js"></script>
   <script>
     const T = TANK, C = T.characters, keys = Object.keys(C), M = T.messages, $ = (id) => document.getElementById(id);
-    const len = (s) => [...s.replace(/\s/g, "")].length;
+    const len = (s) => [...String(s || "").replace(/\s/g, "")].length;
     const by = {}; keys.forEach((k) => (by[k] = { n: 0, chars: 0 }));
     M.forEach((m) => { if (by[m.from]) { by[m.from].n++; by[m.from].chars += len(m.text); } });
     const dates = [...new Set(M.map((m) => m.date))].sort();
