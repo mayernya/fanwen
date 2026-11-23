@@ -390,7 +390,7 @@
       dangerTimer += dt;
       if (dangerTimer >= DANGER_TIME) {
         gameOver = true;
-        overTitleEl.textContent = wonFish ? "🎉 鱼缸装满大肥鱼啦！" : "🫧 鱼缸满出来啦！";
+        overTitleEl.textContent = wonFish ? "🎉 合成终极大肥鱼啦！" : "🫧 装不下啦！";
         overScoreEl.textContent = score;
         overBestEl.textContent = best;
         overEl.hidden = false;

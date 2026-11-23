@@ -135,7 +135,7 @@
         <div>
           <h3>${esc(c.name)} <small>${esc(c.handle)}</small></h3>
           <p>${esc(c.bio)}</p>
-          <span class="count">在鱼缸里说了 ${counts[k] || 0} 句话</span>
+          <span class="count">一共说了 ${counts[k] || 0} 句话</span>
         </div>
       </article>`).join("");
   };
