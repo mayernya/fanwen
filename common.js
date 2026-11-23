@@ -7,8 +7,8 @@
   const PAGES = [
     ["index.html", "首页", "home"],
     ["diary.html", "日记", "diary"],
-    ["timeline.html", "大事记", "timeline"],
-    ["zone.html", "观察区", "zone"],
+    ["game.html", "小游戏", "game"],
+    ["zone.html", "聊天区", "zone"],
     ["stats.html", "统计", "stats"],
     ["manual.html", "说明书", "manual"]
   ];

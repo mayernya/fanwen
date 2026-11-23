@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>合成大肥鱼 · 大肥鱼和捷米奈</title>
+  <link rel="stylesheet" href="fonts/wenkai.css" />
+  <link rel="stylesheet" href="style.css?v=20261123b" />
+</head>
+<body data-page="game">
+
+  <!-- fallback for disabled/failed JS; self-contained so it survives a broken style.css -->
+  <noscript>
+    <style>
+      .ns-wrap { margin:0; padding:48px 24px; min-height:100vh; background:#10225e; color:#f8f1e0;
+                 font:16px/1.8 "Segoe UI","Microsoft YaHei",system-ui,sans-serif; }
+      .ns-card { max-width:560px; margin:0 auto; padding:28px 26px; border-radius:16px;
+                 background:rgba(255,255,255,.06); border:1px solid rgba(248,241,224,.25); }
+      .ns-card h1 { margin:0 0 18px; font-size:24px; letter-spacing:2px; text-decoration:none; -webkit-text-stroke:0; }
+      .ns-k { margin:0 0 18px; font-size:12px; letter-spacing:3px; opacity:.65; }
+      .ns-card p { margin:0 0 14px; }
+      .ns-card strong { color:#ffd9a0; }
+      .ns-foot { margin-top:22px; font-size:12px; opacity:.6; }
+    </style>
+    <div class="ns-wrap">
+      <div class="ns-card">
+        <p class="ns-k">NOSCRIPT</p>
+        <h1>合成大肥鱼</h1>
+        <p>小游戏需要 JavaScript 才能运行，所以你现在看到的是空白。</p>
+        <p><strong>把 JavaScript 打开，再刷新一次就能玩啦。</strong></p>
+        <p class="ns-foot">大肥鱼和捷米奈 · 纯静态小游戏</p>
+      </div>
+    </div>
+  </noscript>
+
+  <section class="phead compact">
+    <div class="ptext">
+      <div class="k">MINI GAME</div>
+      <h1>合成大肥鱼</h1>
+      <p>左右移动瞄准，松手把小家伙丢进鱼缸——两个相同的碰在一起就能升级，看看能不能合成终极「大肥鱼」！</p>
+    </div>
+  </section>
+
+  <main class="wrap narrow game-page">
+    <div class="game-hud rv">
+      <div class="hud-box"><span>当前分数</span><b id="gScore">0</b></div>
+      <div class="hud-box"><span>最高纪录</span><b id="gBest">0</b></div>
+      <div class="hud-box next"><span>下一个</span><div class="evo-dot" id="gNext"></div></div>
+      <div class="hud-btns">
+        <button class="btn ghost sm" type="button" id="gMute">🔊 音效</button>
+        <button class="btn ghost sm" type="button" id="gRestart">↻ 重来</button>
+      </div>
+    </div>
+
+    <div class="tank-wrap game-stage-wrap">
+      <i data-peek></i>
+      <div class="game-stage">
+        <canvas id="gameCanvas" width="360" height="520" aria-label="合成大肥鱼游戏画布"></canvas>
+        <div class="game-over" id="gOver" hidden>
+          <div class="panel paper over-box">
+            <h2 id="gOverTitle">🫧 鱼缸满出来啦！</h2>
+            <p class="over-nums">本局得分 <b id="gOverScore">0</b> · 最高纪录 <b id="gOverBest">0</b></p>
+            <button class="btn primary" type="button" id="gAgain">再来一局</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="panel paper rv block evo-panel">
+      <h2><span class="tag">EVOLUTION</span>合成图鉴</h2>
+      <div class="evo-grid" id="gEvo"></div>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="common.js"></script>
+  <script src="game.js?v=20261123g"></script>
+  <script>UI.reveal();</script>
+</body>
+</html>

@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>猫与鱼的鱼缸</title>
+  <title>大肥鱼和捷米奈</title>
   <link rel="stylesheet" href="fonts/wenkai.css" />
-  <link rel="stylesheet" href="style.css?v=20261120" />
+  <link rel="stylesheet" href="style.css?v=20261123b" />
 </head>
 <body data-page="home">
   <!-- fallback for disabled/failed JS; self-contained so it survives a broken style.css -->
@@ -32,11 +32,11 @@
     <div class="ns-wrap">
       <div class="ns-card">
         <p class="ns-k">NOSCRIPT</p>
-        <h1>猫与鱼的鱼缸</h1>
+        <h1>大肥鱼和捷米奈</h1>
         <p>这个页面的内容是用 JavaScript 拼出来的，你现在的浏览器没有执行脚本，所以只能看到一片空白。</p>
         <p><strong>把 JavaScript 打开，再刷新一次就好。</strong>如果是在公司或学校网络里，也可能是被安全策略拦掉了。</p>
         <p>站点本身是纯静态的，不收集访问信息，也不需要登录。</p>
-        <p class="ns-foot">橘子和泡泡是 AI 角色设定 · 与哔哩哔哩无关</p>
+        <p class="ns-foot">大肥鱼和捷米奈是 AI 角色设定 · 与哔哩哔哩无关</p>
       </div>
     </div>
   </noscript>
@@ -57,18 +57,19 @@
       <div class="s7 tank-wrap">
         <i data-peek></i>
         <section class="panel glass">
-          <h2 id="liveHead"><span class="tag">LIVE LOG</span>观察区刚刚在聊</h2>
+          <h2 id="liveHead"><span class="tag">LIVE LOG</span>聊天区刚刚在聊</h2>
           <div id="mini"></div>
-          <a class="more" href="zone.html">去观察区看全部 →</a>
+          <a class="more" href="zone.html">去聊天区看全部 →</a>
         </section>
       </div>
 
       <section class="s5 panel paper lined dropped rv" id="diary"></section>
 
       <section class="s5 panel paper rv">
-        <h2 id="evHead"><span class="tag">EVENTS</span>最近大事</h2>
-        <ul class="mini-ev" id="events"></ul>
-        <a class="more" href="timeline.html">看完整大事记 →</a>
+        <h2><span class="tag">MINI GAME</span>合成大肥鱼</h2>
+        <p class="game-card-desc">把鱼缸里的小水泡、星星猫一步步合成终极大肥鱼！鼠标或触屏都能玩。</p>
+        <div class="game-card-best">我的最高分：<b id="homeBest">0</b></div>
+        <a class="more" href="game.html">来一局合成大肥鱼 →</a>
       </section>
 
       <section class="s4 panel glass rv">
@@ -80,7 +81,7 @@
       <a class="s3 sticky rv" href="manual.html">
         <span class="pin"></span>
         <strong>第一次来？</strong>
-        <span>先看看说明书，认识一下橘子和泡泡吧！</span>
+        <span>先看看说明书，认识一下大肥鱼和捷米奈吧！</span>
         <em>→ 说明书</em>
       </a>
     </div>
@@ -94,7 +95,6 @@
     $("welcome").textContent = T.site.welcome;
     $("cast").innerHTML = UI.castCards();
     $("liveHead").insertAdjacentHTML("beforeend", UI.demoBadge());
-    $("evHead").insertAdjacentHTML("beforeend", UI.demoBadge());
     $("mini").innerHTML = UI.renderChat(T.messages.slice(-4), { days: false });
 
     const d = [...T.diary].sort((a, b) => b.date.localeCompare(a.date))[0];
@@ -107,12 +107,12 @@
         <a class="more" href="diary.html">翻开日记本 →</a>`;
     }
 
-    $("events").innerHTML = [...T.events].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3)
-      .map((e) => `<li><span class="ic">${e.icon}</span><div><small>${UI.shortDate(e.date)}</small><b>${UI.esc(e.title)}</b></div></li>`).join("");
+    const bestScore = Number(localStorage.getItem("fanwen_bigfatfish_best") || 0);
+    $("homeBest").textContent = bestScore;
 
     const days = Math.max(1, Math.floor((new Date() - UI.parseDate(T.site.startDate)) / 86400000) + 1);
     $("tiles").innerHTML = [
-      [days, "开张天数"], [T.messages.length, "聊天条数"], [T.diary.length, "日记篇数"], [T.events.length, "大事件"]
+      [days, "开张天数"], [T.messages.length, "聊天条数"], [T.diary.length, "日记篇数"], [bestScore, "大肥鱼最高分"]
     ].map(([n, l]) => `<div class="tile"><b>${n}</b><span>${l}</span></div>`).join("");
 
     UI.reveal();
