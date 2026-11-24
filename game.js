@@ -9,10 +9,10 @@
   const SUBSTEPS = 8, DROP_COOLDOWN = 420, DANGER_TIME = 2.2;
   const BEST_KEY = "fanwen_bigfatfish_best";
 
-  /* 10 级合成阶梯（Lv0/Lv1 暂用占位图标，Lv2~Lv9 为 AI 角色圆章图） */
+  /* 10 级合成阶梯（Lv0~Lv9 全部为 AI 角色圆章图） */
   const LEVELS = [
-    { name: "小水泡",   r: 16,  score: 2,    bg: "#d8f0ff", rim: "#7ec8f8", text: "#0b2a58", icon: "🫧", img: "" },
-    { name: "星光糖",   r: 22,  score: 4,    bg: "#fff1b8", rim: "#f6d57a", text: "#5a3d06", icon: "⭐", img: "" },
+    { name: "豆包",     r: 16,  score: 2,    bg: "#dfd8ff", rim: "#5fc5f5", text: "#1e1e58", icon: "🫧", img: "img/game/lv0.jpg" },
+    { name: "Grok",     r: 22,  score: 4,    bg: "#f8dce2", rim: "#b63a4f", text: "#3d0f1b", icon: "⚡", img: "img/game/lv1.jpg" },
     { name: "文心一言", r: 28,  score: 8,    bg: "#d6e6ff", rim: "#5b8ef5", text: "#0e2a66", icon: "🐾", img: "img/game/lv2.jpg" },
     { name: "捷米奈",   r: 35,  score: 16,   bg: "#dfd0ff", rim: "#b794f6", text: "#2b1b54", icon: "🐱", img: "img/game/lv3.jpg" },
     { name: "智谱",     r: 43,  score: 32,   bg: "#d4ddf8", rim: "#5e77c9", text: "#16204a", icon: "💤", img: "img/game/lv4.jpg" },
