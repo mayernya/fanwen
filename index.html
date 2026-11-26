@@ -115,7 +115,7 @@
     $("welcome").textContent = T.site.welcome;
     let heroMode = localStorage.getItem("fanwen_hero_mode") === "chibi" ? "chibi" : "anime";
     const applyHero = () => {
-      $("heroImg").src = heroMode === "chibi" ? "img/banner.jpg" : "img/hero-main.jpg";
+      $("heroImg").src = heroMode === "chibi" ? "img/hero-chibi.jpg" : "img/hero-main.jpg";
       $("heroSwitch").textContent = heroMode === "chibi" ? "✦ 切换正比" : "✦ 切换 Q版";
     };
     $("heroSwitch").addEventListener("click", () => {
