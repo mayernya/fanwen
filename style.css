@@ -639,10 +639,12 @@ img.av { padding: 0; }
   box-shadow: 0 12px 28px -10px rgba(4, 8, 28, .78);
 }
 .msg-img.sticker {
-  width: 158px;
-  border-radius: 20px;
-  border: 2px solid rgba(226, 214, 255, .36);
-  background: rgba(255, 255, 255, .94);
+  width: 156px;
+  border-radius: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  filter: drop-shadow(0 8px 18px rgba(4, 8, 28, .55));
 }
 .msg-img + .msg-txt { margin-top: 8px; }
 
