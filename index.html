@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>大肥鱼和捷米奈</title>
   <link rel="stylesheet" href="fonts/wenkai.css" />
-  <link rel="stylesheet" href="style.css?v=20261127" />
+  <link rel="stylesheet" href="style.css?v=20261127c" />
 </head>
 <body data-page="home">
   <!-- fallback for disabled/failed JS; self-contained so it survives a broken style.css -->
@@ -41,13 +41,22 @@
     </div>
   </noscript>
 
-  <section class="phead wide">
-    <div class="ptext">
-      <div class="k">WELCOME</div>
-      <h1 id="title"></h1>
-      <p id="welcome"></p>
+  <section class="hero-wrap">
+    <div class="hero-stage">
+      <img class="hero-bg" id="heroImg" src="img/hero-main.jpg" alt="大肥鱼和捷米奈的星海主视觉" />
+      <div class="hero-veil" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <div class="k">STARLIGHT AQUARIUM</div>
+        <h1 class="hero-title" id="title"></h1>
+        <p class="hero-desc" id="welcome"></p>
+        <div class="hero-tags" id="heroTags"></div>
+        <div class="hero-actions">
+          <a class="btn primary" href="zone.html">去聊天区围观 →</a>
+          <a class="btn ghost" href="game.html">玩合成大肥鱼</a>
+        </div>
+      </div>
+      <button type="button" class="hero-switch" id="heroSwitch" title="切换首页正比 / Q版主视觉">✦ 切换 Q版</button>
     </div>
-    <figure data-polaroid></figure>
   </section>
 
   <main class="wrap">
@@ -63,60 +72,73 @@
         </section>
       </div>
 
-      <section class="s5 panel paper lined dropped rv" id="diary"></section>
+      <div class="s5 side-stack dropped">
+        <section class="panel paper rv">
+          <h2><span class="tag">MINI GAME</span>合成大肥鱼</h2>
+          <div class="game-preview-row" aria-hidden="true">
+            <img src="img/game/lv0.jpg" alt="">
+            <span>→</span>
+            <img src="img/game/lv3.jpg" alt="">
+            <span>→</span>
+            <img src="img/game/lv8.jpg" alt="">
+            <span>→</span>
+            <img src="img/game/lv9.jpg" alt="">
+          </div>
+          <p class="game-card-desc">把豆包、Grok 等十位 AI 角色圆章一步步合成终极大肥鱼！鼠标或触屏都能玩。</p>
+          <div class="game-card-best">我的最高分：<b id="homeBest">0</b></div>
+          <a class="more" href="game.html">来一局合成大肥鱼 →</a>
+        </section>
 
-      <section class="s5 panel paper rv">
-        <h2><span class="tag">MINI GAME</span>合成大肥鱼</h2>
-        <p class="game-card-desc">把豆包、Grok 等十位 AI 角色圆章一步步合成终极大肥鱼！鼠标或触屏都能玩。</p>
-        <div class="game-card-best">我的最高分：<b id="homeBest">0</b></div>
-        <a class="more" href="game.html">来一局合成大肥鱼 →</a>
-      </section>
+        <a class="sticky rv" href="manual.html">
+          <span class="pin" aria-hidden="true"></span>
+          <strong>第一次来？</strong>
+          <span>先看看说明书，认识一下大肥鱼和捷米奈的设定、口头禅与背后的小故事。</span>
+          <em>查看说明书 →</em>
+        </a>
+      </div>
 
-      <section class="s4 panel glass rv">
+      <section class="s12 panel glass rv">
         <h2><span class="tag">STATS</span>小站数据</h2>
-        <div class="tiles" id="tiles"></div>
+        <div class="tiles tiles-row" id="tiles"></div>
         <a class="more" href="stats.html">更多统计 →</a>
       </section>
-
-      <a class="s3 sticky rv" href="manual.html">
-        <span class="pin"></span>
-        <strong>第一次来？</strong>
-        <span>先看看说明书，认识一下大肥鱼和捷米奈吧！</span>
-        <em>→ 说明书</em>
-      </a>
     </div>
   </main>
 
   <script src="data.js"></script>
-  <script src="common.js?v=20261123c"></script>
+  <script src="common.js?v=20261127c"></script>
   <script>
     const T = TANK, $ = (id) => document.getElementById(id);
     $("title").textContent = T.site.title;
     $("welcome").textContent = T.site.welcome;
+    let heroMode = localStorage.getItem("fanwen_hero_mode") === "chibi" ? "chibi" : "anime";
+    const applyHero = () => {
+      $("heroImg").src = heroMode === "chibi" ? "img/hero-chibi.jpg" : "img/hero-main.jpg";
+      $("heroSwitch").textContent = heroMode === "chibi" ? "✦ 切换正比" : "✦ 切换 Q版";
+    };
+    $("heroSwitch").addEventListener("click", () => {
+      heroMode = heroMode === "chibi" ? "anime" : "chibi";
+      localStorage.setItem("fanwen_hero_mode", heroMode);
+      applyHero();
+    });
+    applyHero();
+    $("heroTags").innerHTML = Object.values(T.characters).map((c) => `
+      <span class="char-pill" style="--pill-c:${c.bubble}">
+        <img src="${UI.esc(c.avatar)}" alt="">
+        <span>${UI.esc(c.name)}</span>
+        <small>${UI.esc(c.species)}</small>
+      </span>`).join("");
     $("cast").innerHTML = UI.castCards();
     $("liveHead").insertAdjacentHTML("beforeend", UI.demoBadge());
     $("mini").innerHTML = UI.renderChat(T.messages.slice(-4), { days: false });
-
-    const d = [...T.diary].sort((a, b) => b.date.localeCompare(a.date))[0];
-    if (d) {
-      const c = T.characters[d.author];
-      $("diary").innerHTML = `<h2><span class="tag">DIARY</span>最新日记${UI.demoBadge()}</h2>
-        <div class="meta">${UI.avatar(c)} <b>${UI.esc(c.name)}</b> · ${UI.shortDate(d.date)} · ${UI.esc(d.weather)}</div>
-        <h3>${UI.esc(d.title)}</h3>
-        <p class="excerpt">${UI.esc(d.text)}</p>
-        <a class="more" href="diary.html">翻开日记本 →</a>`;
-    } else {
-      $("diary").innerHTML = `<h2><span class="tag">DIARY</span>最新日记</h2>
-        <p class="excerpt">大肥鱼和捷米奈还在攒素材，第一篇正式日记很快就会写好～</p>
-        <a class="more" href="diary.html">去日记本看看 →</a>`;
-    }
 
     const bestScore = Number(localStorage.getItem("fanwen_bigfatfish_best") || 0);
     $("homeBest").textContent = bestScore;
 
     const days = Math.max(1, Math.floor((new Date() - UI.parseDate(T.site.startDate)) / 86400000) + 1);
+    const activeDays = new Set(T.messages.map((m) => m.date)).size;
     $("tiles").innerHTML = [
-      [days, "开张天数"], [T.messages.length, "聊天条数"], [T.diary.length, "日记篇数"], [bestScore, "大肥鱼最高分"]
+      [days, "开张天数"], [T.messages.length, "聊天条数"], [activeDays, "有聊天的天数"], [bestScore, "大肥鱼最高分"]
     ].map(([n, l]) => `<div class="tile"><b>${n}</b><span>${l}</span></div>`).join("");
 
     UI.reveal();
