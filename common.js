@@ -158,19 +158,37 @@
       </article>`).join("");
   };
 
+  let revealBound = false;
+  const sweepReveal = () => {
+    const vh = window.innerHeight || 900;
+    document.querySelectorAll(".rv:not(.in), .msg:not(.in), .day:not(.in)").forEach((el) => {
+      if (el.getBoundingClientRect().top <= vh + 180) el.classList.add("in");
+    });
+  };
+
   const reveal = () => {
-    const els = document.querySelectorAll(".rv, .msg, .day");
+    const els = document.querySelectorAll(".rv:not(.in), .msg:not(.in), .day:not(.in)");
     const vh = window.innerHeight || 900;
     const io = "IntersectionObserver" in window
       ? new IntersectionObserver(
           (es) => es.forEach((e) => e.isIntersecting && (e.target.classList.add("in"), io.unobserve(e.target))),
-          { threshold: 0, rootMargin: "0px 0px 80px 0px" }
+          { threshold: 0, rootMargin: "120px 0px 140px 0px" }
         )
       : null;
     els.forEach((el) => {
-      if (!io || el.getBoundingClientRect().top < vh + 40) el.classList.add("in");
+      if (!io || el.getBoundingClientRect().top <= vh + 180) el.classList.add("in");
       else io.observe(el);
     });
+    if (!revealBound) {
+      revealBound = true;
+      let raf = 0;
+      const onScroll = () => {
+        if (raf) return;
+        raf = requestAnimationFrame(() => { raf = 0; sweepReveal(); });
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("hashchange", () => setTimeout(sweepReveal, 80));
+    }
   };
 
   window.UI = { esc, avatar, bubbles, renderChat, castCards, reveal, dayLabel, shortDate, parseDate, demoBadge };
