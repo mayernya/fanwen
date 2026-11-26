@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>大肥鱼和捷米奈</title>
   <link rel="stylesheet" href="fonts/wenkai.css" />
-  <link rel="stylesheet" href="style.css?v=20261127b" />
+  <link rel="stylesheet" href="style.css?v=20261127c" />
 </head>
 <body data-page="home">
   <!-- fallback for disabled/failed JS; self-contained so it survives a broken style.css -->
@@ -89,26 +89,24 @@
           <a class="more" href="game.html">来一局合成大肥鱼 →</a>
         </section>
 
-        <section class="panel paper lined rv" id="diary"></section>
+        <a class="sticky rv" href="manual.html">
+          <span class="pin" aria-hidden="true"></span>
+          <strong>第一次来？</strong>
+          <span>先看看说明书，认识一下大肥鱼和捷米奈的设定、口头禅与背后的小故事。</span>
+          <em>查看说明书 →</em>
+        </a>
       </div>
 
-      <section class="s7 panel glass rv">
+      <section class="s12 panel glass rv">
         <h2><span class="tag">STATS</span>小站数据</h2>
         <div class="tiles tiles-row" id="tiles"></div>
         <a class="more" href="stats.html">更多统计 →</a>
       </section>
-
-      <a class="s5 sticky rv" href="manual.html">
-        <span class="pin" aria-hidden="true"></span>
-        <strong>第一次来？</strong>
-        <span>先看看说明书，认识一下大肥鱼和捷米奈的设定、口头禅与背后的小故事。</span>
-        <em>查看说明书 →</em>
-      </a>
     </div>
   </main>
 
   <script src="data.js"></script>
-  <script src="common.js?v=20261127b"></script>
+  <script src="common.js?v=20261127c"></script>
   <script>
     const T = TANK, $ = (id) => document.getElementById(id);
     $("title").textContent = T.site.title;
@@ -134,26 +132,13 @@
     $("liveHead").insertAdjacentHTML("beforeend", UI.demoBadge());
     $("mini").innerHTML = UI.renderChat(T.messages.slice(-4), { days: false });
 
-    const d = [...T.diary].sort((a, b) => b.date.localeCompare(a.date))[0];
-    if (d) {
-      const c = T.characters[d.author];
-      $("diary").innerHTML = `<h2><span class="tag">DIARY</span>最新日记${UI.demoBadge()}</h2>
-        <div class="meta">${UI.avatar(c)} <b>${UI.esc(c.name)}</b> · ${UI.shortDate(d.date)} · ${UI.esc(d.weather)}</div>
-        <h3>${UI.esc(d.title)}</h3>
-        <p class="excerpt">${UI.esc(d.text)}</p>
-        <a class="more" href="diary.html">翻开日记本 →</a>`;
-    } else {
-      $("diary").innerHTML = `<h2><span class="tag">DIARY</span>最新日记</h2>
-        <p class="excerpt">大肥鱼和捷米奈还在攒素材，第一篇正式日记很快就会写好～</p>
-        <a class="more" href="diary.html">去日记本看看 →</a>`;
-    }
-
     const bestScore = Number(localStorage.getItem("fanwen_bigfatfish_best") || 0);
     $("homeBest").textContent = bestScore;
 
     const days = Math.max(1, Math.floor((new Date() - UI.parseDate(T.site.startDate)) / 86400000) + 1);
+    const activeDays = new Set(T.messages.map((m) => m.date)).size;
     $("tiles").innerHTML = [
-      [days, "开张天数"], [T.messages.length, "聊天条数"], [T.diary.length, "日记篇数"], [bestScore, "大肥鱼最高分"]
+      [days, "开张天数"], [T.messages.length, "聊天条数"], [activeDays, "有聊天的天数"], [bestScore, "大肥鱼最高分"]
     ].map(([n, l]) => `<div class="tile"><b>${n}</b><span>${l}</span></div>`).join("");
 
     UI.reveal();

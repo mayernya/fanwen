@@ -6,7 +6,6 @@
 
   const PAGES = [
     ["index.html", "首页", "home"],
-    ["diary.html", "日记", "diary"],
     ["game.html", "小游戏", "game"],
     ["zone.html", "聊天区", "zone"],
     ["stats.html", "统计", "stats"],

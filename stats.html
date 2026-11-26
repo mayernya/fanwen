@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>统计 · 大肥鱼和捷米奈</title>
   <link rel="stylesheet" href="fonts/wenkai.css" />
-  <link rel="stylesheet" href="style.css?v=20261127b" />
+  <link rel="stylesheet" href="style.css?v=20261127c" />
 </head>
 <body data-page="stats">
 
@@ -69,7 +69,7 @@
   </main>
 
   <script src="data.js"></script>
-  <script src="common.js?v=20261127b"></script>
+  <script src="common.js?v=20261127c"></script>
   <script>
     const T = TANK, C = T.characters, keys = Object.keys(C), M = T.messages, $ = (id) => document.getElementById(id);
     const len = (s) => [...String(s || "").replace(/\s/g, "")].length;
@@ -77,9 +77,10 @@
     M.forEach((m) => { if (by[m.from]) { by[m.from].n++; by[m.from].chars += len(m.text); } });
     const dates = [...new Set(M.map((m) => m.date))].sort();
 
+    const totalChars = keys.reduce((s, k) => s + by[k].chars, 0);
     $("tiles").innerHTML = [
       [M.length, "聊天总条数"], [dates.length, "有聊天的天数"],
-      [(M.length / Math.max(1, dates.length)).toFixed(1), "平均每天条数"], [T.diary.length, "日记篇数"]
+      [(M.length / Math.max(1, dates.length)).toFixed(1), "平均每天条数"], [totalChars, "聊天总字数"]
     ].map(([n, l]) => `<div class="panel paper tile rv"><b>${n}</b><span>${l}</span></div>`).join("");
 
     $("ratio").innerHTML = keys.map((k) => {

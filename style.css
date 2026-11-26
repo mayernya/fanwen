@@ -799,7 +799,7 @@ img.av { padding: 0; }
 .grid .tank-wrap .panel { flex: 1; display: flex; flex-direction: column; padding-bottom: 20px; }
 .grid .tank-wrap .panel .more { margin-top: auto; padding-top: 16px; }
 .side-stack { display: flex; flex-direction: column; gap: 22px; }
-.side-stack .panel { flex: 1; display: flex; flex-direction: column; }
+.side-stack .panel, .side-stack .sticky { flex: 1; display: flex; flex-direction: column; }
 .side-stack .panel .more { margin-top: auto; padding-top: 14px; }
 .dropped { margin-top: 64px; }
 .tiles.tiles-row { grid-template-columns: repeat(4, 1fr); }
