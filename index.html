@@ -105,6 +105,10 @@
         <h3>${UI.esc(d.title)}</h3>
         <p class="excerpt">${UI.esc(d.text)}</p>
         <a class="more" href="diary.html">翻开日记本 →</a>`;
+    } else {
+      $("diary").innerHTML = `<h2><span class="tag">DIARY</span>最新日记</h2>
+        <p class="excerpt">大肥鱼和捷米奈还在攒素材，第一篇正式日记很快就会写好～</p>
+        <a class="more" href="diary.html">去日记本看看 →</a>`;
     }
 
     const bestScore = Number(localStorage.getItem("fanwen_bigfatfish_best") || 0);
