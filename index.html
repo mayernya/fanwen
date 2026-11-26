@@ -43,7 +43,7 @@
 
   <section class="hero-wrap">
     <div class="hero-stage">
-      <img class="hero-bg" id="heroImg" src="img/hero-main.jpg" alt="大肥鱼和捷米奈的星海主视觉" />
+      <img class="hero-bg" id="heroImg" src="img/hero-main.jpg?v=2" alt="大肥鱼和捷米奈的星海主视觉" />
       <div class="hero-veil" aria-hidden="true"></div>
       <div class="hero-copy">
         <div class="k">STARLIGHT AQUARIUM</div>
@@ -113,7 +113,7 @@
     $("welcome").textContent = T.site.welcome;
     let heroMode = localStorage.getItem("fanwen_hero_mode") === "chibi" ? "chibi" : "anime";
     const applyHero = () => {
-      $("heroImg").src = heroMode === "chibi" ? "img/hero-chibi.jpg" : "img/hero-main.jpg";
+      $("heroImg").src = heroMode === "chibi" ? "img/hero-chibi.jpg" : "img/hero-main.jpg?v=2";
       $("heroSwitch").textContent = heroMode === "chibi" ? "✦ 切换正比" : "✦ 切换 Q版";
     };
     $("heroSwitch").addEventListener("click", () => {
