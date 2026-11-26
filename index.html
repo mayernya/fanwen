@@ -43,6 +43,8 @@
 
   <section class="hero-wrap">
     <div class="hero-stage">
+      <img class="hero-bg" id="heroImg" src="img/hero-main.jpg" alt="大肥鱼和捷米奈的星海主视觉" />
+      <div class="hero-veil" aria-hidden="true"></div>
       <div class="hero-copy">
         <div class="k">STARLIGHT AQUARIUM</div>
         <h1 class="hero-title" id="title"></h1>
@@ -53,12 +55,7 @@
           <a class="btn ghost" href="game.html">玩合成大肥鱼</a>
         </div>
       </div>
-      <figure class="hero-visual">
-        <div class="hero-frame">
-          <img id="heroImg" src="img/banner.jpg" alt="大肥鱼和捷米奈的星空合照" />
-          <figcaption class="hero-caption" id="heroCaption"></figcaption>
-        </div>
-      </figure>
+      <button type="button" class="hero-switch" id="heroSwitch" title="切换首页正比 / Q版主视觉">✦ 切换 Q版</button>
     </div>
   </section>
 
@@ -116,8 +113,17 @@
     const T = TANK, $ = (id) => document.getElementById(id);
     $("title").textContent = T.site.title;
     $("welcome").textContent = T.site.welcome;
-    if (T.site.banner) $("heroImg").src = T.site.banner;
-    $("heroCaption").textContent = T.site.polaroidCaption;
+    let heroMode = localStorage.getItem("fanwen_hero_mode") === "chibi" ? "chibi" : "anime";
+    const applyHero = () => {
+      $("heroImg").src = heroMode === "chibi" ? "img/banner.jpg" : "img/hero-main.jpg";
+      $("heroSwitch").textContent = heroMode === "chibi" ? "✦ 切换正比" : "✦ 切换 Q版";
+    };
+    $("heroSwitch").addEventListener("click", () => {
+      heroMode = heroMode === "chibi" ? "anime" : "chibi";
+      localStorage.setItem("fanwen_hero_mode", heroMode);
+      applyHero();
+    });
+    applyHero();
     $("heroTags").innerHTML = Object.values(T.characters).map((c) => `
       <span class="char-pill" style="--pill-c:${c.bubble}">
         <img src="${UI.esc(c.avatar)}" alt="">
