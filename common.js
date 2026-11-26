@@ -53,8 +53,6 @@
 
   const PEEK = `<img class="peek" src="img/peek-cat.png" alt="" aria-hidden="true">`;
 
-  const kelp = (left, h, d) => `<svg class="kelp" viewBox="0 0 40 110" style="left:${left}%;height:${h}px;animation-delay:${d}s"><path d="M20 110 C5 85 35 70 20 50 S5 20 20 2"/></svg>`;
-
   /* ---------- 顶栏 ---------- */
   const header = document.createElement("header");
   header.className = "top";
@@ -67,11 +65,23 @@
   /* ---------- 页脚 ---------- */
   const lastMsg = T.messages[T.messages.length - 1];
   const footer = document.createElement("footer");
-  footer.innerHTML = `<div class="floor">
-      ${kelp(6, 95, -1)}${kelp(12, 70, -3)}${kelp(38, 60, -2)}${kelp(64, 85, -4)}${kelp(84, 100, -0.5)}${kelp(90, 65, -5)}
-      <svg class="dunes" viewBox="0 0 1200 80" preserveAspectRatio="none"><path d="M0 40 Q150 10 300 35 T600 30 T900 38 T1200 25 V80 H0Z" fill="#0a1a4c"/><path d="M0 60 Q200 35 400 55 T800 50 T1200 55 V80 H0Z" fill="#060e2c"/></svg>
+  footer.innerHTML = `<div class="floor" aria-hidden="true">
+      <svg class="dunes" viewBox="0 0 1200 76" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="waveLine" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#c8a6ff" stop-opacity="0"/>
+            <stop offset="35%" stop-color="#c8a6ff" stop-opacity=".42"/>
+            <stop offset="65%" stop-color="#89c2ff" stop-opacity=".42"/>
+            <stop offset="100%" stop-color="#89c2ff" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="M0 44 Q240 16 520 38 T1200 28 V76 H0Z" fill="rgba(13, 21, 56, .68)"/>
+        <path d="M0 44 Q240 16 520 38 T1200 28" fill="none" stroke="url(#waveLine)" stroke-width="1.5"/>
+        <path d="M0 58 Q300 38 660 54 T1200 48 V76 H0Z" fill="#050918"/>
+      </svg>
     </div>
     <div class="foot">
+      <div class="foot-star" aria-hidden="true">· ✦ ·</div>
       <div class="foot-title">${esc(T.site.title)}</div>
       <p>${esc(T.site.footer)}</p>
       ${lastMsg ? `<p class="updated">更新于 ${esc(lastMsg.date)} ${esc(lastMsg.time)}</p>` : ""}
@@ -113,17 +123,22 @@
   };
 
   const renderChat = (msgs, { days = true } = {}) => {
-    let h = "", last = null;
+    let h = "", lastDate = null, prevFrom = null;
     msgs.forEach((m) => {
       const c = T.characters[m.from];
       if (!c) return;
-      if (days && m.date !== last) { h += `<div class="day"><span>${dayLabel(m.date)}</span></div>`; last = m.date; }
+      const newDay = m.date !== lastDate;
+      if (days && newDay) { h += `<div class="day"><span>${dayLabel(m.date)}</span></div>`; }
+      const isCont = !newDay && prevFrom === m.from;
+      lastDate = m.date;
+      prevFrom = m.from;
       const imgHtml = m.img ? `<img class="msg-img${m.sticker ? " sticker" : ""}" src="${esc(m.img)}" alt="${esc(m.alt || "")}" loading="lazy">` : "";
       const txtHtml = m.text ? `<div class="msg-txt">${esc(m.text)}</div>` : "";
       const cls = m.img && !m.text ? "b img-only" : "b";
-      h += `<div class="msg ${c.side === "right" ? "right" : ""}" style="--bc:${c.bubble};--tc:${c.text}">
+      const whoHtml = isCont ? "" : `<div class="who"><b>${esc(c.name)}</b> · ${esc(m.time)}</div>`;
+      h += `<div class="msg${c.side === "right" ? " right" : ""}${isCont ? " cont" : ""}" style="--bc:${c.bubble};--tc:${c.text}">
         ${avatar(c)}
-        <div class="col"><div class="who">${esc(c.name)} · ${esc(c.handle)} · ${esc(m.time)}</div><div class="${cls}">${imgHtml}${txtHtml}</div></div>
+        <div class="col">${whoHtml}<div class="${cls}">${imgHtml}${txtHtml}</div></div>
       </div>`;
     });
     return h;
@@ -132,8 +147,8 @@
   const castCards = () => {
     const counts = {};
     T.messages.forEach((m) => (counts[m.from] = (counts[m.from] || 0) + 1));
-    return Object.entries(T.characters).map(([k, c], i) => `
-      <article class="card rv" style="--bc:${c.bubble};--r:${i % 2 ? 1.5 : -1.5}deg">
+    return Object.entries(T.characters).map(([k, c]) => `
+      <article class="card rv" style="--bc:${c.bubble}">
         ${avatar(c, "av big")}
         <div>
           <h3>${esc(c.name)} <small>${esc(c.handle)}</small></h3>

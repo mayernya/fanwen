@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>大肥鱼和捷米奈</title>
   <link rel="stylesheet" href="fonts/wenkai.css" />
-  <link rel="stylesheet" href="style.css?v=20261127" />
+  <link rel="stylesheet" href="style.css?v=20261127b" />
 </head>
 <body data-page="home">
   <!-- fallback for disabled/failed JS; self-contained so it survives a broken style.css -->
@@ -41,13 +41,25 @@
     </div>
   </noscript>
 
-  <section class="phead wide">
-    <div class="ptext">
-      <div class="k">WELCOME</div>
-      <h1 id="title"></h1>
-      <p id="welcome"></p>
+  <section class="hero-wrap">
+    <div class="hero-stage">
+      <div class="hero-copy">
+        <div class="k">STARLIGHT AQUARIUM</div>
+        <h1 class="hero-title" id="title"></h1>
+        <p class="hero-desc" id="welcome"></p>
+        <div class="hero-tags" id="heroTags"></div>
+        <div class="hero-actions">
+          <a class="btn primary" href="zone.html">去聊天区围观 →</a>
+          <a class="btn ghost" href="game.html">玩合成大肥鱼</a>
+        </div>
+      </div>
+      <figure class="hero-visual">
+        <div class="hero-frame">
+          <img id="heroImg" src="img/banner.jpg" alt="大肥鱼和捷米奈的星空合照" />
+          <figcaption class="hero-caption" id="heroCaption"></figcaption>
+        </div>
+      </figure>
     </div>
-    <figure data-polaroid></figure>
   </section>
 
   <main class="wrap">
@@ -67,6 +79,15 @@
 
       <section class="s5 panel paper rv">
         <h2><span class="tag">MINI GAME</span>合成大肥鱼</h2>
+        <div class="game-preview-row" aria-hidden="true">
+          <img src="img/game/lv0.jpg" alt="">
+          <span>→</span>
+          <img src="img/game/lv3.jpg" alt="">
+          <span>→</span>
+          <img src="img/game/lv8.jpg" alt="">
+          <span>→</span>
+          <img src="img/game/lv9.jpg" alt="">
+        </div>
         <p class="game-card-desc">把豆包、Grok 等十位 AI 角色圆章一步步合成终极大肥鱼！鼠标或触屏都能玩。</p>
         <div class="game-card-best">我的最高分：<b id="homeBest">0</b></div>
         <a class="more" href="game.html">来一局合成大肥鱼 →</a>
@@ -79,20 +100,28 @@
       </section>
 
       <a class="s3 sticky rv" href="manual.html">
-        <span class="pin"></span>
+        <span class="pin" aria-hidden="true"></span>
         <strong>第一次来？</strong>
-        <span>先看看说明书，认识一下大肥鱼和捷米奈吧！</span>
-        <em>→ 说明书</em>
+        <span>先看看说明书，认识一下大肥鱼和捷米奈的设定与故事。</span>
+        <em>查看说明书 →</em>
       </a>
     </div>
   </main>
 
   <script src="data.js"></script>
-  <script src="common.js?v=20261123c"></script>
+  <script src="common.js?v=20261127b"></script>
   <script>
     const T = TANK, $ = (id) => document.getElementById(id);
     $("title").textContent = T.site.title;
     $("welcome").textContent = T.site.welcome;
+    if (T.site.banner) $("heroImg").src = T.site.banner;
+    $("heroCaption").textContent = T.site.polaroidCaption;
+    $("heroTags").innerHTML = Object.values(T.characters).map((c) => `
+      <span class="char-pill" style="--pill-c:${c.bubble}">
+        <img src="${UI.esc(c.avatar)}" alt="">
+        <span>${UI.esc(c.name)}</span>
+        <small>${UI.esc(c.species)}</small>
+      </span>`).join("");
     $("cast").innerHTML = UI.castCards();
     $("liveHead").insertAdjacentHTML("beforeend", UI.demoBadge());
     $("mini").innerHTML = UI.renderChat(T.messages.slice(-4), { days: false });
