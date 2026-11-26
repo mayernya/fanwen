@@ -207,13 +207,13 @@ nav a.on {
 .hero-copy {
   position: relative;
   z-index: 2;
-  max-width: 470px;
+  max-width: 390px;
 }
 .hero-title {
   margin: 14px 0 12px;
   font-family: var(--hand);
   font-weight: 400;
-  font-size: clamp(40px, 4.8vw, 56px);
+  font-size: clamp(38px, 4.4vw, 52px);
   line-height: 1.15;
   letter-spacing: .02em;
   background: linear-gradient(120deg, #ffffff 18%, #e8daff 58%, #c2e4ff 96%);
@@ -225,9 +225,9 @@ nav a.on {
 .hero-desc {
   margin: 0 0 20px;
   color: #dce4ff;
-  font-size: 15.5px;
+  font-size: 15px;
   line-height: 1.8;
-  max-width: 430px;
+  max-width: 375px;
   text-shadow: 0 2px 12px rgba(5, 9, 24, .85);
 }
 .hero-tags {
