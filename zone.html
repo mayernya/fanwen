@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>聊天区 · 大肥鱼和捷米奈</title>
   <link rel="stylesheet" href="fonts/wenkai.css" />
-  <link rel="stylesheet" href="style.css?v=20261123c" />
+  <link rel="stylesheet" href="style.css?v=20261127" />
 </head>
 <body data-page="zone">
 
@@ -45,10 +45,11 @@
 
   <main class="wrap narrow">
     <section class="cast" id="cast"></section>
-    <div class="tank-wrap">
-      <i data-peek></i>
-      <div class="tank" id="tank"></div>
+    <div class="zone-bar" id="zoneBar">
+      <div class="zone-chips" id="zoneChips"></div>
+      <button type="button" class="zone-sort" id="zoneSort">最新在前 ⇅</button>
     </div>
+    <div class="zone-days" id="zoneDays"></div>
   </main>
 
   <script src="data.js"></script>
@@ -56,8 +57,52 @@
   <script>
     document.getElementById("subtitle").textContent = TANK.site.zoneSubtitle;
     document.getElementById("cast").innerHTML = UI.castCards();
-    document.getElementById("tank").innerHTML = UI.bubbles(7) + UI.renderChat(TANK.messages);
-    UI.reveal();
+
+    const byDay = new Map();
+    TANK.messages.forEach((m) => {
+      if (!byDay.has(m.date)) byDay.set(m.date, []);
+      byDay.get(m.date).push(m);
+    });
+    const datesAsc = [...byDay.keys()].sort();
+    const latestDate = datesAsc[datesAsc.length - 1];
+    let order = "desc";
+
+    const chipsEl = document.getElementById("zoneChips");
+    const daysEl = document.getElementById("zoneDays");
+    const sortBtn = document.getElementById("zoneSort");
+
+    function renderZone() {
+      const dates = order === "desc" ? [...datesAsc].reverse() : datesAsc;
+      sortBtn.textContent = order === "desc" ? "最新在前 ⇅" : "最早在前 ⇅";
+      chipsEl.innerHTML = dates.map((d) =>
+        `<a class="zone-chip" href="#day-${UI.esc(d)}">${UI.shortDate(d)} <small>${byDay.get(d).length}</small></a>`
+      ).join("");
+
+      daysEl.innerHTML = dates.map((d, idx) => {
+        const msgs = byDay.get(d);
+        const card = `<section class="tank" id="day-${UI.esc(d)}">
+          ${UI.bubbles(4)}
+          <div class="day-head">
+            <span class="day-title">${UI.dayLabel(d)}</span>
+            ${d === latestDate ? '<span class="day-latest">最新</span>' : ""}
+            <span class="day-count">${msgs.length} 条对话</span>
+          </div>
+          ${UI.renderChat(msgs, { days: false })}
+        </section>`;
+        return idx === 0
+          ? `<div class="tank-wrap"><img class="peek" src="img/peek-cat.png" alt="" aria-hidden="true">${card}</div>`
+          : card;
+      }).join("");
+
+      UI.reveal();
+    }
+
+    sortBtn.addEventListener("click", () => {
+      order = order === "desc" ? "asc" : "desc";
+      renderZone();
+    });
+
+    renderZone();
   </script>
 </body>
 </html>
